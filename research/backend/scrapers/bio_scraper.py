@@ -46,7 +46,7 @@ if response.status_code == 200:
         })
 
     # Print the first 5 results for verification
-    for faculty in faculty_list[:]:
+    for faculty in faculty_list:
         print(faculty)
 
 else:
