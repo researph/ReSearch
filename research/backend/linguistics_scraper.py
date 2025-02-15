@@ -43,7 +43,7 @@ for card in soup.find_all("div", class_="col-md-8"):
         "title": title_text,
         "email": email,
         "website": website,
-        "specialization": specialization,
+        "research_interests": specialization,
         "image": image_url
     })
 

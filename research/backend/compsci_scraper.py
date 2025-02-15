@@ -39,7 +39,7 @@ for card in soup.find_all("div", class_="col-sm-12 col-md-8"):
         "title": title,
         "email": email,
         "research_interests": research_interests,
-        "profile_image_url": profile_image_url
+        "image": profile_image_url
     })
 
 # Print the extracted data
