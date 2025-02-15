@@ -1,19 +1,27 @@
 import requests
 from bs4 import BeautifulSoup
+import mysql.connector
+import os
+from dotenv import load_dotenv
 
-# URL of the NC State CS faculty page
-URL = "https://www.csc.ncsu.edu/directories/professors.php"  # Replace with the actual faculty page URL
+# Load environment variables from .env file
+load_dotenv()
 
-# Send a GET request to fetch the webpage content
-response = requests.get(URL, headers={
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
-})
+# Database connection setup
+db_connection = mysql.connector.connect(
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME")
+)
+cursor = db_connection.cursor()
 
-# Check if the request was successful
-if response.status_code != 200:
-    print(f"❌ Failed to retrieve the page, status code: {response.status_code}")
-else:
-    soup = BeautifulSoup(response.text, "html.parser")
+# Step 1: Send a request to the main page containing the list of professors
+url = 'https://www.csc.ncsu.edu/directories/professors.php'
+response = requests.get(url)
+
+# Parse the HTML content
+soup = BeautifulSoup(response.text, 'html.parser')
 
 # Step 2: Find all professor links on the main page
 professor_links = []
@@ -70,6 +78,34 @@ for professor_link in professor_links:
     # Add the professor info to the list
     professors.append(professor)
 
-# Output or store the data
-for professor in professors:
-    print(professor)
+# Step 4: Insert the scraped data into the MySQL database
+insert_query = """
+    INSERT INTO professors (name, title, email, research_interests, image, website)
+    VALUES (%s, %s, %s, %s, %s, %s)
+"""
+
+for professor in professors_data:
+    # Get the research areas as a string (comma-separated)
+    research_interests = ', '.join(professor.get('Research Areas', [])) if 'Research Areas' in professor else 'N/A'
+
+    # Check if the website link is available and insert "N/A" if not
+    website = professor.get('Website', 'N/A')
+
+    # Execute the insertion query
+    cursor.execute(insert_query, (
+        professor['Name'],  # name
+        professor.get('Title', 'N/A'),  # title (you might want to extract it from another field)
+        professor['Email'],  # email
+        research_interests,  # research interests
+        professor['Photo'],  # image
+        website  # website
+    ))
+
+# Commit the changes to the database
+db_connection.commit()
+
+# Close the cursor and database connection
+cursor.close()
+db_connection.close()
+
+print("Data has been successfully inserted into the database.")
