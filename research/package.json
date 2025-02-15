@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev --turbopack\" \"ts-node-dev --project tsconfig.backend.json --respawn backend/server.ts\"",
+    "dev": "concurrently \"next dev --turbopack\" \"ts-node-dev --project tsconfig.backend.json --respawn backend/db.ts\"",
     "build": "next build && tsc --project tsconfig.backend.json",
-    "start": "npm run build && concurrently \"next start\" \"node dist/server.js\"",
+    "start": "concurrently \"next start\" \"node dist/db.js\"",
     "lint": "next lint"
   },
   "dependencies": {

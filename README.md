@@ -66,3 +66,6 @@
 3. Start MySQL with Docker: docker-compose up -d
     - To stop MySQL: docker-compose down
 4. Start the frontend and backend (via concurrently): npm run dev
+
+## Attributions / Sources
+- Icons created by Freepik-Flaticon / on Figma
