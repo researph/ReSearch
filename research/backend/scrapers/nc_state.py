@@ -28,55 +28,48 @@ professor_links = []
 for link in soup.find_all('a', href=True):
     # Check if the link points to an individual professor's page
     href = link['href']
-    if '/people/' in href:  # Professor links should have "/people/"
+    if '/people/' in href: # Professor links should have "/people/"
         full_url = 'https://www.csc.ncsu.edu' + href if not href.startswith('http') else href
         professor_links.append(full_url)
 
 # Step 3: Scrape each professor's page for details
-professors = []
-for professor_link in professor_links:
-    professor = {}
+professors_data = []
+for professor_url in professor_links:
+    professor_info = {}
 
     # Send request to the professor's individual page
-    response = requests.get(professor_link)
+    response = requests.get(professor_url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
     # Get professor's name
     name_tag = soup.find('span', class_='prof_name')
     if name_tag:
-        professor['name'] = name_tag.get_text(strip=True)
-
-    # Get professor's title (found in the <span class="position"> tag)
-    title_tag = soup.find('span', class_='position')
-    if title_tag:
-        professor['title'] = title_tag.get_text(strip=True)
+        professor_info['Name'] = name_tag.get_text(strip=True)
 
     # Get professor's photo (image tag with class 'profilepic')
     img_tag = soup.find('img', class_='profilepic')
     if img_tag:
-        professor['image'] = 'https://www.csc.ncsu.edu' + img_tag['src']  # Get the full image URL
+        professor_info['Photo'] = 'https://www.csc.ncsu.edu' + img_tag['src'] # Get the full image URL
 
     # Get professor's email (found in the mailto link)
     email_tag = soup.find('a', href=True, string=lambda text: '@' in text)
     if email_tag:
-        professor['email'] = email_tag.get_text(strip=True)
+        professor_info['Email'] = email_tag.get_text(strip=True)
 
     # Get professor's website (link to website)
     website_tag = soup.find('a', href=True, string='Web Site')
     if website_tag:
-        professor['website'] = website_tag['href']
+        professor_info['Website'] = website_tag['href']
 
     # Get research areas (list of topics in the "Research Areas" section)
     research_tag = soup.find('h2', string='Research Areas')
     if research_tag:
         research_areas = research_tag.find_next('ul')
         if research_areas:
-            professor['research areas'] = [li.get_text(strip=True) for li in research_areas.find_all('li')]
-
-    professor('')
+            professor_info['Research Areas'] = [li.get_text(strip=True) for li in research_areas.find_all('li')]
 
     # Add the professor info to the list
-    professors.append(professor)
+    professors_data.append(professor_info)
 
 # Step 4: Insert the scraped data into the MySQL database
 insert_query = """
@@ -93,12 +86,12 @@ for professor in professors_data:
 
     # Execute the insertion query
     cursor.execute(insert_query, (
-        professor['Name'],  # name
-        professor.get('Title', 'N/A'),  # title (you might want to extract it from another field)
-        professor['Email'],  # email
-        research_interests,  # research interests
-        professor['Photo'],  # image
-        website  # website
+        professor['Name'], # name
+        professor.get('Title', 'N/A'), # title (you might want to extract it from another field)
+        professor['Email'], # email
+        research_interests, # research interests
+        professor['Photo'], # image
+        website # website
     ))
 
 # Commit the changes to the database
