@@ -36,7 +36,7 @@ else:
 
         # Extract professor image URL
         img_tag = li.find("img")
-        professor['image_url'] = img_tag["src"] if img_tag else "N/A"
+        professor['image'] = img_tag["src"] if img_tag else "N/A"
 
         # Extract website link, safely handle None
         website_tag = li.find("div", class_="views-field-field-websites")
