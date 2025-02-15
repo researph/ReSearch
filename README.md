@@ -4,20 +4,28 @@
 
 ## 🚀 Tech Stack  
 ### **Frontend**  
-- **Next.js (React Framework)**
+- **Next.js (React Framework)**  
 - **TypeScript**
 - **Tailwind CSS**
 
 ### **Backend**  
-- **Next.js API Routes**
+- **Next.js API Routes** Server-side logic integrated directly into the Next.js framework.
 
 ### **Database**  
-- **MySQL**
+- **MySQL** Relational database for structured data storage.
 
 ### **Scraping**  
 - **Python**
 - **Selenium**
 
+### Features
+✅ Search by Name, University, or Research Interest
+
+✅ Aggregated Researcher Profiles
+
+✅ Automated Data Collection & Updates
+
+✅ User-Friendly Interface with Fast Search
 ## 🛠️ Setup & Installation  
 
 ### **Prerequisites**  
