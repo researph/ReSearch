@@ -1,5 +1,20 @@
 import requests
 from bs4 import BeautifulSoup
+import mysql.connector
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Database connection setup
+db_connection = mysql.connector.connect(
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME")
+)
+cursor = db_connection.cursor()
 
 # URL of the faculty page
 URL = "https://cs.unc.edu/about/people/?wpv-designation=faculty"  # Replace with actual faculty page URL
@@ -42,6 +57,24 @@ for card in soup.find_all("div", class_="col-sm-12 col-md-8"):
         "image": profile_image_url
     })
 
-# Print the extracted data
+# Insert data into the MySQL database
+insert_query = """
+    INSERT INTO professors (name, title, email, research_interests, image, website)
+    VALUES (%s, %s, %s, %s, %s, %s)
+"""
+
 for prof in professors:
-    print(prof)
+    # Check if the website link is available and insert "N/A" if not
+    website = prof.get('website', 'N/A')
+
+    # Execute the insertion query
+    cursor.execute(insert_query, (prof['name'], prof['title'], prof['email'], prof['research_interests'], prof['image'], website))
+
+# Commit the changes to the database
+db_connection.commit()
+
+# Close the cursor and database connection
+cursor.close()
+db_connection.close()
+
+print("Data has been successfully inserted into the database.")
