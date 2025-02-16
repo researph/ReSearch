@@ -16,13 +16,9 @@ db_connection = mysql.connector.connect(
 )
 cursor = db_connection.cursor()
 
-# URL of the Duke CS faculty page
-URL = "https://cs.duke.edu/people/appointed-faculty/primary-faculty"  # Replace with the actual faculty page URL
-
 # Send a GET request to fetch the webpage content
-response = requests.get(URL, headers={
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
-})
+url = 'https://cs.duke.edu/people/appointed-faculty/primary-faculty'
+response = requests.get(url)
 
 # Check if the request was successful
 if response.status_code != 200:
