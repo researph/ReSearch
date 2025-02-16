@@ -19,62 +19,89 @@ cursor = db_connection.cursor()
 # Send a GET request to fetch the webpage content
 url = 'https://cs.duke.edu/people/appointed-faculty/primary-faculty'
 response = requests.get(url)
+soup = BeautifulSoup(response.text, "html.parser")
 
-# Check if the request was successful
-if response.status_code != 200:
-    print(f"❌ Failed to retrieve the page, status code: {response.status_code}")
-else:
-    soup = BeautifulSoup(response.text, "html.parser")
+# List to store professor links
+professor_links = []
 
-    # List to store professor details
-    professors = []
+for professor_item in soup.find_all('li', class_='grid list-group-item'):
+    profile_link_tag = professor_item.find('a', href=True)
+    if profile_link_tag:
+        profile_link = profile_link_tag['href']
+        professor_links.append(profile_link)
+    
+# List to store professor details
+professors = []
 
-    # Loop through each professor item in the list
-    for li in soup.find_all("li", class_="grid list-group-item"):
-        professor = {}
+# Scrape each professor's page for details
+for professor_url in professor_links:
+    # Send request to the professor's individual page
+    response = requests.get(professor_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Extract professor name
-        name_tag = li.find("div", class_="h4").find("a") if li.find("div", class_="h4") else None
-        professor['name'] = name_tag.text.strip() if name_tag else "N/A"
+    # Extract name
+    name_tag = soup.find('span', class_='pr-3')
+    name = name_tag.text.strip() if name_tag else 'N/A'
 
-        # Extract professor title
-        title_tag = li.find("div", class_="h6")
-        professor['title'] = title_tag.text.strip() if title_tag else "N/A"
+    # Extract title
+    title_tag = soup.find('div', class_='sub-h1')
+    title = title_tag.text.strip() if title_tag else 'N/A'
 
-        # Extract professor email
-        email_tag = li.find("a", href=lambda href: href and "mailto:" in href)
-        professor['email'] = email_tag.text.strip() if email_tag else "N/A"
+    # Extract email
+    email_tag = soup.find('a', href=lambda href: href and "mailto:" in href)
+    email = email_tag.text.strip() if email_tag else 'N/A'
 
-        # Extract professor image URL
-        img_tag = li.find("img")
-        professor['image'] = img_tag["src"] if img_tag else "N/A"
+    # Extract department
+    department_tag = soup.find('a', class_='primary-org')
+    department = department_tag.text.strip() if department_tag else 'N/A'
 
-        # Extract website link, safely handle None
-        website_tag = li.find("div", class_="views-field-field-websites")
-        if website_tag:
-            website_link = website_tag.find("a")
-            professor['website'] = website_link['href'] if website_link else "N/A"
-        else:
-            professor['website'] = "N/A"
+    # Extract research areas
+    research_tag = soup.find('div', class_='excerpt')
+    research_areas = research_tag.text.strip() if research_tag else 'N/A'
 
-        # Add the professor's details to the list
-        professors.append(professor)
+    # Extract image
+    image_tag = soup.find('div', class_='profile-img-box').find('img')
+    image = image_tag['src'] if image_tag else 'N/A'
 
-    # Insert data into the MySQL database
-    insert_query = """
-        INSERT INTO professors (name, title, email, research_interests, image, website)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """
+    # Extract website
+    website_tag = soup.find('h2', string="External Links")
+    website = website_tag.find_next('a', href=True)['href'] if website_tag and website_tag.find_next('a', href=True) else 'N/A'
 
-    for prof in professors:
-        # Assuming research_interests is not available on this page, so inserting "N/A"
-        cursor.execute(insert_query, (prof['name'], prof['title'], prof['email'], "N/A", prof['image'], prof['website']))
+    # Store the professor's details
+    professors.append({
+        "name": name,
+        "title": title,
+        "email": email,
+        "department": department,
+        "research_areas": research_areas,
+        "image": image,
+        "website": website
+    })
 
-    # Commit the changes to the database
-    db_connection.commit()
+# Insert the scraped data into the MySQL database
+insert_query = """
+    INSERT INTO professors (school, department, name, title, email, research_areas, image, website)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+"""
 
-    # Close the cursor and database connection
-    cursor.close()
-    db_connection.close()
+for professor in professors:
+    # Execute the insertion query
+    cursor.execute(insert_query, (
+        'Duke',
+        professor['department'],
+        professor['name'],
+        professor['title'],
+        professor['email'],
+        professor['research_areas'],
+        professor['image'],
+        professor['website']
+    ))
 
-    print("Data has been successfully inserted into the database.")
+# Commit the changes to the database
+db_connection.commit()
+
+# Close the cursor and database connection
+cursor.close()
+db_connection.close()
+
+print("Duke has been successfully inserted into the database.")

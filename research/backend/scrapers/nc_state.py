@@ -19,9 +19,7 @@ cursor = db_connection.cursor()
 # Send a GET request to fetch the webpage content
 url = 'https://www.csc.ncsu.edu/directories/professors.php'
 response = requests.get(url)
-
-# Parse the HTML content
-soup = BeautifulSoup(response.text, 'html.parser')
+soup = BeautifulSoup(response.text, "html.parser")
 
 # List to store professor links
 professor_links = []
@@ -31,6 +29,7 @@ for link in soup.find_all('a', href=True):
     # Check if the link points to an individual professor's page
     href = link['href']
     if '/people/' in href: # Professor links should have "/people/"
+        # Links on this page omit server name, so need to add it back
         full_url = 'https://www.csc.ncsu.edu' + href if not href.startswith('http') else href
         professor_links.append(full_url)
 
@@ -43,17 +42,16 @@ for professor_url in professor_links:
     response = requests.get(professor_url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Extract professor name without trailing comma
+    # Extract name without trailing comma
     name_tag = soup.find('span', class_='prof_name')
     name = name_tag.text.strip()[:-1] if name_tag else 'N/A'
-
 
     # Extract title without trailing spaces and department
     title_tag = soup.find('span', class_='position')
     title = title_tag.text.strip().split("  ")[0] if title_tag else 'N/A'
 
     # Extract email
-    email_tag = soup.find("a", href=lambda href: href and "mailto:" in href)
+    email_tag = soup.find('a', href=lambda href: href and "mailto:" in href)
     email = email_tag.text.strip() if email_tag else 'N/A'
 
     # Extract research areas
@@ -65,11 +63,11 @@ for professor_url in professor_links:
     else:
         research_areas = 'N/A'
 
-    # Extract profile image URL
+    # Extract image
     image_tag = soup.find('img', class_='profilepic')
     image = 'https://www.csc.ncsu.edu' + image_tag['src'] if image_tag else 'N/A'
 
-    # Extract professor's website
+    # Extract website
     website_tag = soup.find('a', href=True, string='Web Site')
     website = website_tag['href'] if website_tag else 'N/A'
 
@@ -90,17 +88,16 @@ insert_query = """
 """
 
 for professor in professors:
-
     # Execute the insertion query
     cursor.execute(insert_query, (
         'NC State',
         'Computer Science',
-        professor['name'], # name
-        professor['title'], # title
-        professor['email'], # email
-        professor['research_areas'], # research areas
-        professor['image'], # image
-        professor['website'] # website
+        professor['name'],
+        professor['title'],
+        professor['email'],
+        professor['research_areas'],
+        professor['image'],
+        professor['website']
     ))
 
 # Commit the changes to the database
