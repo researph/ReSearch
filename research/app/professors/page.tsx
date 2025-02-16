@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // ✅ Get query from URL
+import { useRouter, useSearchParams } from "next/navigation";
 import NavBar from "../components/NavBar";
 import Card from "../components/Card";
 import "../globals.css";
@@ -19,10 +19,10 @@ interface Professor {
 }
 
 export default function Professors() {
-  const searchParams = useSearchParams(); // ✅ Get query from URL
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const initialQuery = searchParams.get("query") || ""; // ✅ Start with URL query
-  const [query, setQuery] = useState<string>(initialQuery); // ✅ Use local state for query
+  const initialQuery = searchParams.get("query") || "";
+  const [query, setQuery] = useState<string>(initialQuery);
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +48,7 @@ export default function Professors() {
 
   // Ensure filtering works correctly for multiple search terms
   const filteredProfessors = professors.filter((professor) => {
-    const lowerQuery = query.toLowerCase().split(" "); // ✅ Split multiple terms
+    const lowerQuery = query.toLowerCase().split(" ");
     return lowerQuery.every(
       (term) =>
         professor.name.toLowerCase().includes(term) ||
