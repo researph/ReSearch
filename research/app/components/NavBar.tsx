@@ -44,9 +44,6 @@ export default function NavBar({ query, setQuery }: NavBarProps) {
         <Link href="/saved" className="nav-link">
           Saved
         </Link>
-        <Link href="/mail" className="nav-link">
-          Mail
-        </Link>
 
         {/* User Profile Image */}
         <Image
