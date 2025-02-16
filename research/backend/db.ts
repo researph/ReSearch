@@ -1,5 +1,11 @@
 import 'dotenv/config';
 import mysql, { Connection } from 'mysql2';
+import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const db: Connection = mysql.createConnection({
   host: process.env.DB_HOST as string,
@@ -11,10 +17,10 @@ const db: Connection = mysql.createConnection({
 
 db.connect((err) => {
   if (err) {
-    console.error('❌ Database connection failed:', err.stack);
+    console.error('Database connection failed:', err.stack);
     return;
   }
-  console.log('✅ Connected to MySQL on port', process.env.DB_PORT);
+  console.log('Connected to MySQL on port', process.env.DB_PORT);
 });
 
 const createProfessorsTableQuery = `
@@ -31,22 +37,46 @@ const createProfessorsTableQuery = `
   );
 `;
 
-// Run the query to create the table
 db.query(createProfessorsTableQuery, (err, results) => {
   if (err) {
-    console.error('❌ Error creating professors table:', err);
+    console.error('Error creating professors table:', err);
   } else {
-    console.log('✅ Professors table created (or already exists)');
+    console.log('Professors table created (or already exists)');
+    runScrapers(); // Run scrapers after table creation
   }
 
-  // Close the connection after the setup
+  // Close the database connection
   db.end((err) => {
     if (err) {
-      console.error('❌ Error closing the database connection:', err);
+      console.error('Error closing the database connection:', err);
     } else {
-      console.log('✅ Database connection closed');
+      console.log('Database connection closed');
     }
   });
 });
+
+// Function to run scrapers
+const runScrapers = () => {
+  const scraperFolder = path.join(__dirname, 'scrapers'); // Adjusted to 'backend/scraper/'
+  const scrapers = ['duke_scraper.py', 'unc_scraper.py', 'nc_state.py'];
+
+  scrapers.forEach((script) => {
+    const scriptPath = path.join(scraperFolder, script); // Construct full path
+
+    const process = spawn('python3', [scriptPath]);
+
+    process.stdout.on('data', (data) => {
+      console.log(` ${script} Output: ${data}`);
+    });
+
+    process.stderr.on('data', (data) => {
+      console.error(` ${script} Error: ${data}`);
+    });
+
+    process.on('close', (code) => {
+      console.log(`${script} finished with exit code ${code}`);
+    });
+  });
+};
 
 export default db;
