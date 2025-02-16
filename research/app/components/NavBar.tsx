@@ -5,8 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import SearchBar from "../components/SearchBar";
 
-export default function NavBar() {
-  const pathname = usePathname(); // ✅ Get current route
+// Accept query and setQuery props
+interface NavBarProps {
+  query: string;
+  setQuery: (query: string) => void;
+}
+
+export default function NavBar({ query, setQuery }: NavBarProps) {
+  const pathname = usePathname(); // Get current route
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white px-6 py-4 flex items-center justify-between">
@@ -26,10 +32,10 @@ export default function NavBar() {
         )}
       </div>
 
-      {/* Search Bar ((not displayed on home page) */}
+      {/* Search Bar (not displayed on home page) */}
       {pathname !== "/" && (
         <div className="flex-1 flex justify-center">
-          <SearchBar />
+          <SearchBar query={query} setQuery={setQuery} />
         </div>
       )}
 
@@ -54,3 +60,4 @@ export default function NavBar() {
     </nav>
   );
 }
+

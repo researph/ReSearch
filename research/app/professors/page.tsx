@@ -21,6 +21,7 @@ export default function Professors() {
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
     const fetchProfessors = async () => {
@@ -41,9 +42,17 @@ export default function Professors() {
     fetchProfessors();
   }, []);
 
+  // Filter professors based on the search query
+  const filteredProfessors = professors.filter((professor) =>
+    professor.name.toLowerCase().includes(query.toLowerCase()) ||
+    professor.department.toLowerCase().includes(query.toLowerCase()) ||
+    professor.school.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen flex flex-col overflow-auto">
-      <NavBar />
+      {/* Pass query and setQuery to NavBar */}
+      <NavBar query={query} setQuery={setQuery} />
 
       {/* Loading State */}
       {loading && (
@@ -63,7 +72,7 @@ export default function Professors() {
       {!loading && !error && (
         <div className="flex-grow mt-[125px] pb-8 px-4 overflow-auto flex justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl">
-            {professors.map((professor) => (
+            {filteredProfessors.map((professor) => (
               <Card key={professor.id} {...professor} />
             ))}
           </div>

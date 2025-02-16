@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent } from "react";
 import { Search } from "lucide-react";
 
-export default function SearchBar() {
-  const [query, setQuery] = useState("");
+interface SearchBarProps {
+  query: string;
+  setQuery: (query: string) => void;
+}
+
+export default function SearchBar({ query, setQuery }: SearchBarProps) {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value); // Update the query state when the user types
+  };
 
   return (
     <div className="relative w-full max-w-xl">
@@ -13,8 +20,9 @@ export default function SearchBar() {
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleInputChange}
           className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 shadow-md text-md bg-white focus:outline-none focus:ring-0"
+          placeholder="Search professors..."
         />
       </div>
     </div>
