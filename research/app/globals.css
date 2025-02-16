@@ -23,7 +23,7 @@ body {
 /* Search Bar Styles */
 .search-bar {
   @apply w-[500px] px-12 py-3 text-lg border border-gray-300 rounded-full shadow-md bg-white;
-  @apply focus:outline-none focus:ring-0; /* Removed unwanted focus border */
+  @apply focus:outline-none focus:ring-0;
 }
 
 /* Search Icon */
