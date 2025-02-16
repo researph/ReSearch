@@ -12,11 +12,10 @@ app.get('/api/professors', (req, res) => {
   const sql = 'SELECT * FROM professors';
   db.query(sql, (err, results) => {
     if (err) {
-      console.error('Error fetching professors:', err);
-      res.status(500).json({ error: 'Database error' });
-    } else {
-      res.json(results);
+      console.error('Error fetching professors:', err); 
+      return res.status(500).json({ error: err.message }); 
     }
+    res.json(results);
   });
 });
 

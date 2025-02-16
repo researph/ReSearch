@@ -57,14 +57,6 @@ const resetProfessorsTable = () => {
         runScrapers(); // Run scrapers after table creation
       }
 
-      // Close the database connection
-      db.end((err) => {
-        if (err) {
-          console.error('Error closing the database connection:', err);
-        } else {
-          console.log('Database connection closed');
-        }
-      });
     });
   });
 };
