@@ -28,13 +28,13 @@ export default function NavBar() {
 
       {/* Search Bar ((not displayed on home page) */}
       {pathname !== "/" && (
-        <div className="flex-1 flex justify-center mt-3">
+        <div className="flex-1 flex justify-center">
           <SearchBar />
         </div>
       )}
 
       {/* Navigation Links */}
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-6 mt-3">
         <Link href="/saved" className="nav-link">
           Saved
         </Link>

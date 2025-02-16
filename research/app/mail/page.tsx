@@ -1,5 +1,5 @@
 import NavBar from "../components/NavBar";
-import InfoIcon from "../components/InfoIcon";
+import Letter from "../components/Letter";
 import "../globals.css";
 
 export default function Mail() {
@@ -8,8 +8,9 @@ export default function Mail() {
       {/* NavBar Component */}
       <NavBar />
 
-      {/* Bottom Right Info Icon Component */}
-      <InfoIcon />
+      <div className="min-h-screen flex items-center justify-center">
+        <Letter />
+      </div>
 
     </div>
   );
