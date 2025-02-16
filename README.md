@@ -11,6 +11,7 @@ Additionally, ReSearch makes it easier to stay organized and reach out to your f
 * Save your favorite professors to your personal list for easy access.
 * Quickly email professors by clicking on their email icon.
 * Visit their lab websites directly with just a click, making it easier to explore their research projects.
+* Has a feature that allows users to upload a text version of their resume and select from a dropdown of their saved professors. The platform then generates a draft email to that professor based on the user’s resume and the professor’s research areas, making it easier to reach out with personalized content. 
 
 For Computer Science students in the Research Triangle, ReSearch is the perfect tool to efficiently explore and connect with the vibrant research community at UNC, NC State, and Duke, saving you time and helping you make meaningful academic connections.
 
@@ -19,9 +20,9 @@ For Computer Science students in the Research Triangle, ReSearch is the perfect 
 
 ✅ Aggregated Researcher Profiles
 
-✅ Automated Data Collection & Updates
-
 ✅ User-Friendly Interface with Fast Search
+
+✅ Draft Research Interest Email Generator
 
 ## 🚀 Tech Stack  
 ### **Frontend**  
@@ -42,6 +43,9 @@ For Computer Science students in the Research Triangle, ReSearch is the perfect 
 ### **Scraping**  
 - **Python**
 - **Beautiful Soup**
+
+### **Generative AI - Draft Email**
+- **Gemini API**
 
 ## 🛠️ Setup & Installation  
 
