@@ -45,13 +45,20 @@ export default function Card({
     setIsSaved(!isSaved);
   };
 
+  // 🏫 **Assign School-Specific Colors**
+  const schoolColorClass =
+    school.includes("UNC") ? "text-[var(--unc)]" :
+    school.includes("NC State") ? "text-[var(--nc-state)]" :
+    school.includes("Duke") ? "text-[var(--duke)]" :
+    "text-black";
+
   return (
     <div className="bg-white p-4 rounded-lg shadow-md w-[300px] border flex flex-col h-full">
       {/* Header - Profile Image + Name */}
       <div className="flex items-center space-x-3 mb-2">
         <div className="flex-grow">
           <h2 className="text-lg font-bold">{name}</h2>
-          <p className="text-sm text-gray-600">{school}</p>
+          <p className={`text-sm font-semibold ${schoolColorClass}`}>{school}</p> {/* 🔥 School Name Colored */}
           <p className="text-sm text-gray-600">{department}</p>
         </div>
 
@@ -78,20 +85,17 @@ export default function Card({
       {/* Research Interests (Optional) */}
       {research_areas && <p className="text-sm text-gray-700">🎯 {research_areas}</p>}
 
-      {/* 🛠 **Pushes Icons to the Bottom** */}
+      {/* Push Icons to Bottom */}
       <div className="flex-grow"></div>
 
       {/* Icons - Website, Heart, Email */}
       <div className="flex justify-between items-center text-xl pt-3 border-t mt-3">
         <div className="flex space-x-4">
-          {/* ✅ Hide if website is "N/A" */}
           {website && website !== "N/A" && (
             <Link href={website} target="_blank" rel="noopener noreferrer">
               <p className="text-sm hover:underline">🔗</p>
             </Link>
           )}
-
-          {/* ✅ Hide if email is "N/A" */}
           {email && email !== "N/A" && (
             <Link href={`mailto:${email}`} target="_blank">
               <p className="text-sm hover:underline">✉️</p>
