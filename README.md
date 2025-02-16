@@ -44,7 +44,7 @@ For Computer Science students in the Research Triangle, ReSearch is the perfect 
 - **Python**
 - **Beautiful Soup**
 
-### **Generative AI - Draft Email**
+### **Generative AI (Draft Email)**
 - **Gemini API**
 
 ## 🛠️ Setup & Installation  
@@ -78,10 +78,28 @@ For Computer Science students in the Research Triangle, ReSearch is the perfect 
     DB_PASSWORD=password
     DB_NAME=research_db
     DB_PORT=3306
-2. Install dependencies: npm install
-3. Start MySQL with Docker: docker-compose up -d
+2. Install dependencies: `npm install`
+3. Start MySQL with Docker: `docker-compose up -d`
     - To stop MySQL: docker-compose down
-4. Start the frontend and backend (via concurrently): npm run dev
+4. Start the frontend and backend (via concurrently): `npm run dev`
+
+### **Gemini API Note**
+We integrated Google's Gemini Pro API into our Next.js + TypeScript project to generate email drafts based on user input (resume). 
+
+Here was our process:
+1. Created the API Endpoint
+2. Developed prompt:
+    >Based on the following resume text, generate a professional cover letter addressed to Professor ${professor} about their research.
+    >   
+    >${resumeText}
+    >
+    >The cover letter should:
+    >- Be concise and professional.
+    >- Highlight relevant skills and experience.
+    >- Express interest in learning more and request a meeting.
+    >- Be formatted properly with a subject line and email signature.
+
+3. Displayed the generated letter.
 
 ## Attributions / Sources
-- Icons created on Figma using designs by Freepik (Flaticon)
+Profile icon created on Figma using designs by Freepik (Flaticon)!
