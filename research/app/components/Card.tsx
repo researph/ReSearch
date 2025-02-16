@@ -49,9 +49,9 @@ export default function Card({
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md w-[300px] flex flex-col space-y-3 border">
+    <div className="bg-white p-4 rounded-lg shadow-md w-[300px] border flex flex-col">
       {/* Header - Profile Image + Name */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-3 mb-2">
         <div className="flex-grow">
           <h2 className="text-lg font-bold">{name}</h2>
           <p className="text-sm text-gray-600">{school}</p>
@@ -67,7 +67,7 @@ export default function Card({
               width={50}
               height={50}
               className="w-full h-full object-cover"
-              unoptimized // TEMP FIX for external images
+              unoptimized
             />
           ) : (
             <div className="w-full h-full bg-gray-300" />
@@ -75,14 +75,14 @@ export default function Card({
         </div>
       </div>
 
-      {/* Title */}
+      {/* Title (Optional) */}
       {title && <p className="text-sm text-gray-700">🎓 {title}</p>}
 
-      {/* Research Interests */}
+      {/* Research Interests (Optional) */}
       {research_areas && <p className="text-sm text-gray-700">🎯 {research_areas}</p>}
 
       {/* Icons - Website, Heart, Email */}
-      <div className="flex justify-between items-center mt-3 text-xl">
+      <div className="flex justify-between items-center mt-auto text-xl pt-3">
         <div className="flex space-x-4">
           {website && (
             <Link href={website} target="_blank" rel="noopener noreferrer">
