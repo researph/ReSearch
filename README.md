@@ -12,7 +12,7 @@ Additionally, ReSearch makes it easier to stay organized and reach out to your f
 * Quickly email professors by clicking on their email icon.
 * Visit their lab websites directly with just a click, making it easier to explore their research projects.
 
-Whether you're a student looking for a potential research advisor or a professional exploring the latest work in Computer Science, ReSearch saves you time by bringing all the relevant details into one accessible interface.
+For Computer Science students in the Research Triangle, ReSearch is the perfect tool to efficiently explore and connect with the vibrant research community at UNC, NC State, and Duke, saving you time and helping you make meaningful academic connections.
 
 ## Features
 ✅ Search by Name, University, or Research Interest
