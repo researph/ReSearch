@@ -37,7 +37,7 @@ export default function LetterPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      });
+      });      
 
       if (!response.ok) {
         throw new Error(`Failed to generate letter. Status: ${response.status}`);
@@ -101,7 +101,7 @@ export default function LetterPage() {
         {/* Generated Email Draft Card */}
         {letter && (
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-xl border mt-4">
-            <h3 className="text-md font-semibold mb-3">📩 Generated Email Draft</h3>
+            <h2 className="text-lg font-bold mb-3">📩 Generated Email Draft</h2>
             <pre className="text-sm bg-gray-100 border rounded-md p-4 whitespace-pre-wrap">
               {letter}
             </pre>

@@ -60,17 +60,27 @@ app.post(
 
       const response = await fetch(GEMINI_API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: prompt }]
+            }
+          ]
         }),
       });
+      
+      
 
       if (!response.ok) {
-        console.error("❌ Gemini API Request Failed:", response.status, response.statusText);
-        res.status(500).json({ error: "Gemini API request failed." });
+        const errorDetails = await response.text(); // Log full response
+        console.error("❌ Gemini API Request Failed:", response.status, response.statusText, errorDetails);
+        res.status(500).json({ error: "Gemini API request failed.", details: errorDetails });
         return;
-      }
+      }      
 
       const data = await response.json();
       console.log("📩 Gemini API Response:", data);
