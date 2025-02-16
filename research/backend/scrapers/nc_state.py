@@ -19,15 +19,15 @@ cursor = db_connection.cursor()
 # Send a GET request to fetch the webpage content
 url = 'https://www.csc.ncsu.edu/directories/professors.php'
 response = requests.get(url)
-soup = BeautifulSoup(response.text, "html.parser")
+soup = BeautifulSoup(response.text, 'html.parser')
 
 # List to store professor links
 professor_links = []
 
 # Scrape main page for each professor's page
-for link in soup.find_all('a', href=True):
+for link_tag in soup.find_all('a', href=True):
     # Check if the link points to an individual professor's page
-    href = link['href']
+    href = link_tag['href']
     if '/people/' in href: # Professor links should have "/people/"
         # Links on this page omit server name, so need to add it back
         full_url = 'https://www.csc.ncsu.edu' + href if not href.startswith('http') else href
@@ -37,9 +37,9 @@ for link in soup.find_all('a', href=True):
 professors = []
 
 # Scrape each professor's page for details
-for professor_url in professor_links:
+for professor_link in professor_links:
     # Send request to the professor's individual page
-    response = requests.get(professor_url)
+    response = requests.get(professor_link)
     soup = BeautifulSoup(response.text, 'html.parser')
 
     # Extract name without trailing comma
@@ -62,7 +62,7 @@ for professor_url in professor_links:
         research_areas = ', '.join(research_list)
         # Cut off at 300 characters
         if len(research_areas) > 300:
-            research_areas = research_areas[:299]
+            research_areas = research_areas[:299] + '...'
     else:
         research_areas = 'N/A'
 

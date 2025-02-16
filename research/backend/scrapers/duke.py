@@ -24,20 +24,24 @@ soup = BeautifulSoup(response.text, "html.parser")
 # List to store professor links
 professor_links = []
 
+# Scrape main page for each professor's page
 for professor_item in soup.find_all('li', class_='grid list-group-item'):
-    profile_link_tag = professor_item.find('a', href=True)
-    if profile_link_tag:
-        profile_link = profile_link_tag['href']
-        professor_links.append(profile_link)
+    link_tag = professor_item.find('a', href=True)
+    if link_tag:
+        professor_links.append(link_tag['href'])
     
 # List to store professor details
 professors = []
 
 # Scrape each professor's page for details
-for professor_url in professor_links:
+for professor_link in professor_links:
     # Send request to the professor's individual page
-    response = requests.get(professor_url)
+    response = requests.get(professor_link)
     soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Extract department
+    department_tag = soup.find('a', class_='primary-org')
+    department = department_tag.text.strip() if department_tag else 'N/A'
 
     # Extract name
     name_tag = soup.find('span', class_='pr-3')
@@ -51,16 +55,12 @@ for professor_url in professor_links:
     email_tag = soup.find('a', href=lambda href: href and "mailto:" in href)
     email = email_tag.text.strip() if email_tag else 'N/A'
 
-    # Extract department
-    department_tag = soup.find('a', class_='primary-org')
-    department = department_tag.text.strip() if department_tag else 'N/A'
-
     # Extract research areas
     research_tag = soup.find('div', class_='excerpt')
     research_areas = research_tag.text.strip() if research_tag else 'N/A'
     # Cut off at 300 characters
     if len(research_areas) > 300:
-        research_areas = research_areas[:299]
+        research_areas = research_areas[:299] + '...'
 
     # Extract image
     image_tag = soup.find('div', class_='profile-img-box').find('img')
@@ -72,10 +72,10 @@ for professor_url in professor_links:
 
     # Store the professor's details
     professors.append({
+        "department": department,
         "name": name,
         "title": title,
         "email": email,
-        "department": department,
         "research_areas": research_areas,
         "image": image,
         "website": website
