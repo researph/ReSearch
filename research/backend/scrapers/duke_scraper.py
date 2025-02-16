@@ -72,7 +72,7 @@ else:
 
     for prof in professors:
         # Assuming research_interests is not available on this page, so inserting "N/A"
-        cursor.execute(insert_query, (prof['name'], prof['title'], prof['email'], "N/A", prof['image_url'], prof['website']))
+        cursor.execute(insert_query, (prof['name'], prof['title'], prof['email'], "N/A", prof['image'], prof['website']))
 
     # Commit the changes to the database
     db_connection.commit()
