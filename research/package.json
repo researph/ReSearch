@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev --turbopack\" \"ts-node-dev --project tsconfig.backend.json --respawn backend/db.ts\"",
+    "dev": "echo running from $(pwd) && concurrently \"next dev --turbopack\" \"tsx  backend/api.ts\"",
     "build": "next build && tsc --project tsconfig.backend.json",
     "start": "concurrently \"next start\" \"node dist/db.js\"",
     "lint": "next lint"
@@ -14,7 +14,8 @@
     "mysql2": "^3.12.0",
     "next": "15.1.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
