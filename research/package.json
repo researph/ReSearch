@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "lucide-react": "^0.475.0",
     "mysql2": "^3.12.0",
     "next": "15.1.7",
