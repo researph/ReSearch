@@ -14,62 +14,45 @@
   --light-grey: #F5F5F5;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --text: #ffffff;
-  }
-}
-
 body {
   color: var(--text);
   background: var(--background);
   font-family: var(--font-roboto), sans-serif;
 }
 
-/* Reusable Tailwind Classes */
+/* Search Bar Styles */
 .search-bar {
-  @apply w-full px-5 py-3 text-lg border rounded-full shadow-md focus:outline-none focus:ring-2;
-  border-color: var(--grey);
-  background-color: var(--light-grey);
-  color: var(--text);
+  @apply w-[500px] px-12 py-3 text-lg border border-gray-300 rounded-full shadow-md bg-white;
+  @apply focus:outline-none focus:ring-0; /* Removed unwanted focus border */
 }
 
+/* Search Icon */
 .search-icon {
-  @apply absolute top-3 left-4;
-  color: var(--dark-grey);
+  @apply absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500;
 }
 
+/* NavBar Styles */
+.nav-link {
+  @apply text-gray-700 hover:text-black transition duration-300;
+}
+
+/* Menu Text */
 .menu-text {
-  @apply hover:underline text-[var(--dark-grey)];
+  @apply hover:underline text-gray-700;
 }
 
+/* User Profile Icon */
 .user-icon {
-  @apply w-8 h-8 flex items-center justify-center rounded-full font-bold;
+  @apply w-8 h-8 flex items-center justify-center rounded-full font-bold border border-gray-300;
   background-color: var(--light-grey);
   color: white;
 }
 
+/* Bottom Right Info Icon */
 .info-icon {
-  @apply absolute bottom-5 right-5 text-xl cursor-pointer;
-  color: var(--dark-grey);
+  @apply absolute bottom-5 right-5 text-xl cursor-pointer text-gray-500;
 }
 
 .info-icon:hover {
-  color: var(--text);
+  @apply text-black;
 }
-
-/* Search Bar Styles */
-.search-bar {
-  @apply w-full px-5 py-3 text-lg border rounded-full shadow-md focus:outline-none focus:ring-2;
-  border-color: var(--grey);
-  background-color: var(--light-grey);
-  color: var(--text);
-}
-
-.search-icon {
-  @apply absolute top-3 left-4;
-  color: var(--dark-grey);
-}
-
