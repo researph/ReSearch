@@ -14,14 +14,6 @@ interface Professor {
   research_areas?: string;
 }
 
-interface GeminiResponse {
-  candidates?: {
-    content?: {
-      parts?: { text: string }[];
-    };
-  }[];
-}
-
 export default function LetterPage() {
   const { register, handleSubmit } = useForm<ResumeData>();
   const [letter, setLetter] = useState<string | null>(null);
@@ -56,21 +48,19 @@ export default function LetterPage() {
         throw new Error(`Failed to generate letter. Status: ${response.status}`);
       }
   
-      const result: GeminiResponse = await response.json();
+      const result = await response.json();
       console.log("API Result:", result);
   
-      // ✅ Extract text safely
-      const letterText = result.candidates?.[0]?.content?.parts?.[0]?.text || "Error: Unable to extract letter text";
-      setLetter(letterText);
+      // ✅ Set letter directly (no need to extract from JSON structure)
+      setLetter(result.letter);
     } catch (error) {
       console.error("Error in API request:", error);
       setError("Failed to generate letter. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
+  };  
   
-
   return (
     <div className="flex flex-col min-h-screen mt-[50px]">
       {/* NavBar Component */}
@@ -126,6 +116,7 @@ export default function LetterPage() {
               </pre>
             </div>
           )}
+
 
         </div>
       </div>

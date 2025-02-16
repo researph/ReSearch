@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation"; // ✅ Import this!
 import NavBar from "../components/NavBar";
 import Card from "../components/Card";
 import "../globals.css";
@@ -21,7 +22,9 @@ export default function Professors() {
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [query, setQuery] = useState<string>("");
+
+  const searchParams = useSearchParams(); // ✅ Get query from URL
+  const query = searchParams.get("query") || ""; // ✅ Extract query
 
   useEffect(() => {
     const fetchProfessors = async () => {
@@ -42,10 +45,10 @@ export default function Professors() {
     fetchProfessors();
   }, []);
 
-  // Filter professors based on the search query
+  // ✅ Filter professors based on the search query from URL
   const filteredProfessors = professors.filter((professor) => {
-    const searchTerms = query.toLowerCase().split(" "); // Split into words
-  
+    const searchTerms = query.toLowerCase().split(" ");
+
     return searchTerms.every((term) =>
       Object.values(professor).some(
         (value) =>
@@ -53,12 +56,10 @@ export default function Professors() {
       )
     );
   });
-  
 
   return (
     <div className="min-h-screen flex flex-col overflow-auto">
-      {/* Pass query and setQuery to NavBar */}
-      <NavBar query={query} setQuery={setQuery} />
+      <NavBar query={query} setQuery={() => {}} /> {/* Disable direct query state update */}
 
       {/* Loading State */}
       {loading && (

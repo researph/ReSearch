@@ -14,19 +14,18 @@ export default function SearchBar({ query, setQuery }: SearchBarProps) {
 
   // Handle input change
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (typeof setQuery === "function") {
-      setQuery(e.target.value || "");
-    } else {
-      console.error("setQuery is not defined! Make sure it is passed from the parent.");
-    }
-  };
+    console.log("User typed:", e.target.value); // Debugging log
+    setQuery(e.target.value || "");
+  };  
 
   // Redirect on Enter
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && query.trim() !== "") {
-      router.push(`/professors?query=${encodeURIComponent(query)}`);
+      console.log("Navigating to:", `/professors?query=${encodeURIComponent(query)}`);
+      router.replace(`/professors?query=${encodeURIComponent(query)}`);
     }
   };
+  
 
   return (
     <div className="relative w-full max-w-xl">
