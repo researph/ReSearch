@@ -11,7 +11,7 @@ interface Professor {
   name: string;
   school: string;
   department: string;
-  title?: string;
+  title: string;
   email?: string;
   research_areas?: string;
   image?: string;
@@ -46,21 +46,22 @@ export default function Professors() {
     fetchProfessors();
   }, []);
 
-  // ✅ Ensure filtering works correctly for multiple search terms
+  // Ensure filtering works correctly for multiple search terms
   const filteredProfessors = professors.filter((professor) => {
     const lowerQuery = query.toLowerCase().split(" "); // ✅ Split multiple terms
     return lowerQuery.every(
       (term) =>
         professor.name.toLowerCase().includes(term) ||
         professor.department.toLowerCase().includes(term) ||
-        professor.school.toLowerCase().includes(term) ||
+        professor.school.toLowerCase().includes(term) || 
+        professor.title.toLowerCase().includes(term) ||
         (professor.research_areas && professor.research_areas.toLowerCase().includes(term))
     );
   });
 
   return (
     <div className="min-h-screen flex flex-col overflow-auto">
-      {/* ✅ Pass query state to NavBar */}
+      {/* Pass query state to NavBar */}
       <NavBar query={query} setQuery={setQuery} />
 
       {/* Loading State */}

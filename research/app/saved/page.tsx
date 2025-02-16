@@ -14,15 +14,17 @@ export default function Saved() {
     setSavedProfessors(storedProfessors);
   }, []);
 
-  // Filter saved professors based on the search query
+
+  // Ensure filtering works correctly for multiple search terms
   const filteredProfessors = savedProfessors.filter((professor) => {
-    const searchTerms = query.toLowerCase().split(" "); // Split into words
-  
-    return searchTerms.every((term) =>
-      Object.values(professor).some(
-        (value) =>
-          typeof value === "string" && value.toLowerCase().includes(term)
-      )
+    const lowerQuery = query.toLowerCase().split(" "); // ✅ Split multiple terms
+    return lowerQuery.every(
+      (term) =>
+        professor.name.toLowerCase().includes(term) ||
+        professor.department.toLowerCase().includes(term) ||
+        professor.school.toLowerCase().includes(term) || 
+        professor.title.toLowerCase().includes(term) ||
+        (professor.research_areas && professor.research_areas.toLowerCase().includes(term))
     );
   });
   
