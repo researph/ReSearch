@@ -3,7 +3,8 @@
     "@google-cloud/vertexai": "^1.9.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "react-hook-form": "^7.54.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
