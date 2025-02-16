@@ -10,7 +10,7 @@ export interface CardProps {
   department: string;
   title?: string;
   email?: string;
-  research_interests?: string;
+  research_areas?: string;
   image?: string;
   website?: string;
 }
@@ -21,7 +21,7 @@ export default function Card({
   department,
   title,
   email,
-  research_interests,
+  research_areas,
   image,
   website,
 }: CardProps) {
@@ -41,7 +41,7 @@ export default function Card({
     if (isSaved) {
       savedProfessors = savedProfessors.filter((prof: CardProps) => prof.name !== name);
     } else {
-      savedProfessors.push({ name, school, department, title, email, research_interests, image, website });
+      savedProfessors.push({ name, school, department, title, email, research_areas, image, website });
     }
 
     localStorage.setItem("savedProfessors", JSON.stringify(savedProfessors));
@@ -57,22 +57,29 @@ export default function Card({
           <p className="text-sm text-gray-600">{school}</p>
           <p className="text-sm text-gray-600">{department}</p>
         </div>
-        {image && (
-          <Image
-            src={image}
-            alt={`${name}'s profile`}
-            width={50}
-            height={50}
-            className="rounded-full border"
-          />
-        )}
+
+        {/* Profile Image - Circular Fix */}
+        <div className="w-[50px] h-[50px] rounded-full overflow-hidden border border-gray-300">
+          {image ? (
+            <Image
+              src={image}
+              alt={`${name}'s profile`}
+              width={50}
+              height={50}
+              className="w-full h-full object-cover"
+              unoptimized // TEMP FIX for external images
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-300" />
+          )}
+        </div>
       </div>
-      
+
       {/* Title */}
       {title && <p className="text-sm text-gray-700">🎓 {title}</p>}
 
       {/* Research Interests */}
-      {research_interests && <p className="text-sm text-gray-700">🎯 {research_interests}</p>}
+      {research_areas && <p className="text-sm text-gray-700">🎯 {research_areas}</p>}
 
       {/* Icons - Website, Heart, Email */}
       <div className="flex justify-between items-center mt-3 text-xl">

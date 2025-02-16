@@ -62,12 +62,12 @@ else:
 
     # Insert data into the MySQL database
     insert_query = """
-        INSERT INTO professors (name, title, email, research_interests, image, website)
+        INSERT INTO professors (name, title, email, research_areas, image, website)
         VALUES (%s, %s, %s, %s, %s, %s)
     """
 
     for prof in professors:
-        # Assuming research_interests is not available on this page, so inserting "N/A"
+        # Assuming research_areas is not available on this page, so inserting "N/A"
         cursor.execute(insert_query, (prof['name'], prof['title'], prof['email'], "N/A", prof['image'], prof['website']))
 
     # Commit the changes to the database
