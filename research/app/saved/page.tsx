@@ -17,7 +17,7 @@ export default function Saved() {
 
   // Ensure filtering works correctly for multiple search terms
   const filteredProfessors = savedProfessors.filter((professor) => {
-    const lowerQuery = query.toLowerCase().split(" "); // ✅ Split multiple terms
+    const lowerQuery = query.toLowerCase().split(" ");
     return lowerQuery.every(
       (term) =>
         professor.name.toLowerCase().includes(term) ||
