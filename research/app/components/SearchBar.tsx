@@ -38,7 +38,6 @@ export default function SearchBar({ query, setQuery }: SearchBarProps) {
           onChange={handleInputChange}
           onKeyDown={handleKeyPress}
           className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 shadow-md text-md bg-white focus:outline-none focus:ring-0"
-          placeholder="Search professors..."
         />
       </div>
     </div>
