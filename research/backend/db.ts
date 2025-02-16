@@ -23,28 +23,9 @@ db.connect((err) => {
   console.log('Connected to MySQL on port', process.env.DB_PORT);
 });
 
-
-const createProfessorsTableQuery = `
-  CREATE TABLE IF NOT EXISTS professors (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    school VARCHAR(255),
-    department VARCHAR(255),
-    name VARCHAR(255) NOT NULL,
-    title VARCHAR(255),
-    email VARCHAR(255),
-    research_interests TEXT,
-    image VARCHAR(255),
-    website VARCHAR(255)
-  );
-`;
-
-db.query(createProfessorsTableQuery, (err, results) => {
-  if (err) {
-    console.error('Error creating professors table:', err);
-  } else {
-    console.log('Professors table created (or already exists)');
-    runScrapers(); // Run scrapers after table creation
-  }
+// Function to reset and recreate the professors table
+const resetProfessorsTable = () => {
+  const dropTableQuery = `DROP TABLE IF EXISTS professors;`;
 
   db.query(dropTableQuery, (err) => {
     if (err) {
