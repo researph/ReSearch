@@ -29,7 +29,7 @@
 
 ### **Scraping**  
 - **Python**
-- **Selenium**
+- **Beautiful Soup**
 
 ## 🛠️ Setup & Installation  
 
@@ -68,4 +68,4 @@
 4. Start the frontend and backend (via concurrently): npm run dev
 
 ## Attributions / Sources
-- Icons created by Freepik-Flaticon / on Figma
+- Icons created on Figma using designs by Freepik (Flaticon)

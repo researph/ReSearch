@@ -10,7 +10,7 @@ export default function HomePage() {
       {/* NavBar Component */}
       <NavBar />
 
-      {/* Logo / Title Image */}
+      {/* Title Image */}
       <Image
         src="/assets/title.png"
         alt="ReSearch Logo"
@@ -23,7 +23,7 @@ export default function HomePage() {
       {/* Search Bar Component */}
       <SearchBar />
 
-      {/* Bottom Right Info Icon Component */}
+      {/* Info Component */}
       <InfoIcon />
 
     </div>
