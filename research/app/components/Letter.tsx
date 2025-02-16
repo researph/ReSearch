@@ -21,7 +21,7 @@ export default function Letter() {
 
   const onSubmit = async (data: LetterData) => {
     setLoading(true);
-    const response = await fetch("/api/generateLetter", {
+    const response = await fetch("http://localhost:5001/api/generateLetter", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

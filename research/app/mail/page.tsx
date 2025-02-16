@@ -33,7 +33,7 @@ export default function LetterPage() {
     setLetter(null);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/generateLetter`, {
+      const response = await fetch('http://localhost:5001/api/generateLetter', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
