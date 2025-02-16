@@ -41,8 +41,8 @@ for card in soup.find_all("div", class_="col-sm-12 col-md-8"):
     email = email_tag.text.strip() if email_tag else "N/A"
 
     # Extract research interests
-    research_interests_element = card.find("div", class_="details")
-    research_interests = research_interests_element.text.strip() if research_interests_element else "N/A"
+    research_areas_element = card.find("div", class_="details")
+    research_areas = research_areas_element.text.strip() if research_areas_element else "N/A"
 
     # Extract profile image URL
     img_tag = card.find("img")
@@ -53,13 +53,13 @@ for card in soup.find_all("div", class_="col-sm-12 col-md-8"):
         "name": name,
         "title": title,
         "email": email,
-        "research_interests": research_interests,
+        "research_areas": research_areas,
         "image": profile_image_url
     })
 
 # Insert data into the MySQL database
 insert_query = """
-    INSERT INTO professors (name, title, email, research_interests, image, website)
+    INSERT INTO professors (name, title, email, research_areas, image, website)
     VALUES (%s, %s, %s, %s, %s, %s)
 """
 
@@ -68,7 +68,7 @@ for prof in professors:
     website = prof.get('website', 'N/A')
 
     # Execute the insertion query
-    cursor.execute(insert_query, (prof['name'], prof['title'], prof['email'], prof['research_interests'], prof['image'], website))
+    cursor.execute(insert_query, (prof['name'], prof['title'], prof['email'], prof['research_areas'], prof['image'], website))
 
 # Commit the changes to the database
 db_connection.commit()

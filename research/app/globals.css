@@ -12,6 +12,9 @@
   --dark-grey: #5F6367;
   --grey: #D2D2D2;
   --light-grey: #F5F5F5;
+  --unc: #4B9CD3;
+  --nc-state: #CC0000;
+  --duke: #012169;
 }
 
 body {
@@ -20,18 +23,13 @@ body {
   font-family: var(--font-roboto), sans-serif;
 }
 
-/* Search Bar Styles */
+/* Search Bar */
 .search-bar {
   @apply w-[500px] px-12 py-3 text-lg border border-gray-300 rounded-full shadow-md bg-white;
   @apply focus:outline-none focus:ring-0;
 }
 
-/* Search Icon */
-.search-icon {
-  @apply absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500;
-}
-
-/* NavBar Styles */
+/* NavBar */
 .nav-link {
   @apply text-gray-700 hover:text-black transition duration-300;
 }
@@ -41,7 +39,7 @@ body {
   @apply hover:underline text-gray-700;
 }
 
-/* User Profile Icon */
+/* User Profile */
 .user-icon {
   @apply w-8 h-8 flex items-center justify-center rounded-full font-bold border border-gray-300;
   background-color: var(--light-grey);

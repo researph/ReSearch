@@ -1,10 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, KeyboardEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
-export default function SearchBar() {
-  const [query, setQuery] = useState("");
+interface SearchBarProps {
+  query: string;
+  setQuery: (query: string) => void; // ✅ Ensure setQuery is required
+}
+
+export default function SearchBar({ query, setQuery }: SearchBarProps) {
+  const router = useRouter();
+
+  // Handle input change
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (typeof setQuery === "function") {
+      setQuery(e.target.value || "");
+    } else {
+      console.error("setQuery is not defined! Make sure it is passed from the parent.");
+    }
+  };
+
+  // Redirect on Enter
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && query.trim() !== "") {
+      router.push(`/professors?query=${encodeURIComponent(query)}`);
+    }
+  };
 
   return (
     <div className="relative w-full max-w-xl">
@@ -13,8 +35,10 @@ export default function SearchBar() {
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyPress}
           className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 shadow-md text-md bg-white focus:outline-none focus:ring-0"
+          placeholder="Search professors..."
         />
       </div>
     </div>
