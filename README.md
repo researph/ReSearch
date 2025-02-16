@@ -1,6 +1,18 @@
 # 🔍  ReSearch : Finding research shouldn’t feel like a research project!
 
-**ReSearch** is a centralized database that makes finding professors and researchers easy. No more clicking through endless university / departmental / personal pages — search by name, university, or research interest and get the info you need in one place.
+**ReSearch** ReSearch is a streamlined, user-friendly platform designed to help you quickly discover Computer Science research professors across three prestigious universities—UNC, NC State, and Duke. Gone are the days of sifting through multiple university websites, departmental pages, or personal blogs. With ReSearch, you can:
+
+* Search for professors by name, university, or research area.
+* Browse detailed profiles, including contact information, research interests, and academic background.
+* Centralize information from multiple universities, making it easy to compare and connect with experts in your field.
+
+Additionally, ReSearch makes it easier to stay organized and reach out to your favorite professors:
+
+* Save your favorite professors to your personal list for easy access.
+* Quickly email professors by clicking on their email icon.
+* Visit their lab websites directly with just a click, making it easier to explore their research projects.
+
+Whether you're a student looking for a potential research advisor or a professional exploring the latest work in Computer Science, ReSearch saves you time by bringing all the relevant details into one accessible interface.
 
 ## Features
 ✅ Search by Name, University, or Research Interest
