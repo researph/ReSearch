@@ -8,26 +8,28 @@ import InfoIcon from "./components/InfoIcon";
 import "./globals.css";
 
 export default function HomePage() {
-  // Add state for search query
   const [query, setQuery] = useState<string>("");
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col min-h-screen">
       {/* Pass query and setQuery to NavBar */}
       <NavBar query={query} setQuery={setQuery} />
 
-      {/* Title Image */}
-      <Image
-        src="/assets/title.png"
-        alt="ReSearch Logo"
-        width={300}
-        height={80}
-        priority
-        className="mb-8"
-      />
+      {/* Centered Content */}
+      <div className="flex flex-grow flex-col items-center justify-center">
+        {/* Title Image */}
+        <Image
+          src="/assets/title.png"
+          alt="ReSearch Logo"
+          width={300}
+          height={80}
+          priority
+          className="mb-6"
+        />
 
-      {/* Pass query and setQuery to SearchBar */}
-      <SearchBar query={query} setQuery={setQuery} />
+        {/* Search Bar */}
+        <SearchBar query={query} setQuery={setQuery} />
+      </div>
 
       {/* Info Component */}
       <InfoIcon />

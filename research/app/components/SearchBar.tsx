@@ -1,6 +1,7 @@
 "use client";
 
-import { ChangeEvent } from "react";
+import { ChangeEvent, KeyboardEvent } from "react";
+import { useRouter } from "next/navigation"; // ✅ Import Next.js router
 import { Search } from "lucide-react";
 
 interface SearchBarProps {
@@ -9,8 +10,18 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ query, setQuery }: SearchBarProps) {
+  const router = useRouter(); // ✅ Get router instance
+
+  // 🛠 Handle text input change
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value); // Update the query state when the user types
+    setQuery(e.target.value);
+  };
+
+  // 🚀 Redirect when Enter is pressed
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && query.trim() !== "") {
+      router.push(`/professors?query=${encodeURIComponent(query)}`);
+    }
   };
 
   return (
@@ -21,6 +32,7 @@ export default function SearchBar({ query, setQuery }: SearchBarProps) {
           type="text"
           value={query}
           onChange={handleInputChange}
+          onKeyDown={handleKeyPress} // ✅ Detect Enter key press
           className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 shadow-md text-md bg-white focus:outline-none focus:ring-0"
           placeholder="Search professors..."
         />
