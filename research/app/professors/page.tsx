@@ -42,16 +42,26 @@ export default function Professors() {
     fetchProfessors();
   }, []);
 
-  // Filter professors based on the search query
-  const filteredProfessors = professors.filter((professor) =>
-    professor.name.toLowerCase().includes(query.toLowerCase()) ||
-    professor.department.toLowerCase().includes(query.toLowerCase()) ||
-    professor.school.toLowerCase().includes(query.toLowerCase())
-  );
+  // 🔍 **Enhanced Filtering Logic**: Includes name, school, department, research areas, etc.
+  const filteredProfessors = professors.filter((professor) => {
+    const searchString = [
+      professor.name,
+      professor.school,
+      professor.department,
+      professor.title,
+      professor.email,
+      professor.research_areas,
+      professor.website,
+    ]
+      .filter(Boolean) // ✅ Remove null/undefined values
+      .join(" ") // ✅ Merge into a single searchable string
+      .toLowerCase();
+
+    return searchString.includes(query.toLowerCase());
+  });
 
   return (
     <div className="min-h-screen flex flex-col overflow-auto">
-      {/* Pass query and setQuery to NavBar */}
       <NavBar query={query} setQuery={setQuery} />
 
       {/* Loading State */}
@@ -70,11 +80,13 @@ export default function Professors() {
 
       {/* Professors Grid */}
       {!loading && !error && (
-        <div className="flex-grow mt-[125px] pb-8 px-4 overflow-auto flex justify-center">
+        <div className="mt-[125px] pb-8 px-4 overflow-auto flex justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl">
-            {filteredProfessors.map((professor) => (
-              <Card key={professor.id} {...professor} />
-            ))}
+            {filteredProfessors.length > 0 ? (
+              filteredProfessors.map((professor) => <Card key={professor.id} {...professor} />)
+            ) : (
+              <p className="text-gray-500 text-lg col-span-3 text-center">No results found.</p>
+            )}
           </div>
         </div>
       )}
