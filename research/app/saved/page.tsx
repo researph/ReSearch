@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
-import Card, { CardProps } from "../components/Card"; // ✅ Import CardProps
+import Card, { CardProps } from "../components/Card"; // Import CardProps
 import "../globals.css";
 
 export default function Saved() {
   const [savedProfessors, setSavedProfessors] = useState<CardProps[]>([]);
-  const [query, setQuery] = useState<string>(""); // ✅ Ensure query state exists
+  const [query, setQuery] = useState<string>(""); // Ensure query state exists
 
   useEffect(() => {
     const storedProfessors = JSON.parse(localStorage.getItem("savedProfessors") || "[]");
@@ -15,17 +15,21 @@ export default function Saved() {
   }, []);
 
   // Filter saved professors based on the search query
-  const filteredProfessors = savedProfessors.filter((professor) =>
-    Object.values(professor).some(
-      (value) =>
-        typeof value === "string" &&
-        value.toLowerCase().includes(query.toLowerCase())
-    )
-  );
+  const filteredProfessors = savedProfessors.filter((professor) => {
+    const searchTerms = query.toLowerCase().split(" "); // Split into words
+  
+    return searchTerms.every((term) =>
+      Object.values(professor).some(
+        (value) =>
+          typeof value === "string" && value.toLowerCase().includes(term)
+      )
+    );
+  });
+  
 
   return (
     <div className="min-h-screen flex flex-col overflow-auto">
-      {/* ✅ Pass query and setQuery to NavBar */}
+      {/* Pass query and setQuery to NavBar */}
       <NavBar query={query} setQuery={setQuery} />
 
       {/* Empty State */}

@@ -8,11 +8,11 @@ import InfoIcon from "./components/InfoIcon";
 import "./globals.css";
 
 export default function HomePage() {
-  const [query, setQuery] = useState<string>(""); // ✅ Ensure setQuery exists
+  const [query, setQuery] = useState<string>(""); // Ensure setQuery exists
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      {/* ✅ Pass query and setQuery to NavBar */}
+      {/* Pass query and setQuery to NavBar */}
       <NavBar query={query} setQuery={setQuery} />
 
       {/* Title Image */}
@@ -25,7 +25,7 @@ export default function HomePage() {
         className="mb-8"
       />
 
-      {/* ✅ Pass query and setQuery to SearchBar */}
+      {/* Pass query and setQuery to SearchBar */}
       <SearchBar query={query} setQuery={setQuery} />
 
       {/* Info Component */}

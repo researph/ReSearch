@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // ✅ Import for query reading
 import NavBar from "../components/NavBar";
 import Card from "../components/Card";
 import "../globals.css";
@@ -19,13 +18,10 @@ interface Professor {
 }
 
 export default function Professors() {
-  const searchParams = useSearchParams(); // ✅ Get query from URL
-  const initialQuery = searchParams.get("query") || ""; // ✅ Extract query param
-
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [query, setQuery] = useState<string>(initialQuery); // ✅ Set initial state
+  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
     const fetchProfessors = async () => {
@@ -46,23 +42,22 @@ export default function Professors() {
     fetchProfessors();
   }, []);
 
-  // ✅ Automatically update query state when URL changes
-  useEffect(() => {
-    setQuery(initialQuery);
-  }, [initialQuery]);
-
-  // ✅ Filter professors based on query
-  const filteredProfessors = professors.filter((professor) =>
-    Object.values(professor).some(
-      (value) =>
-        typeof value === "string" &&
-        value.toLowerCase().includes(query.toLowerCase())
-    )
-  );
+  // Filter professors based on the search query
+  const filteredProfessors = professors.filter((professor) => {
+    const searchTerms = query.toLowerCase().split(" "); // Split into words
+  
+    return searchTerms.every((term) =>
+      Object.values(professor).some(
+        (value) =>
+          typeof value === "string" && value.toLowerCase().includes(term)
+      )
+    );
+  });
+  
 
   return (
     <div className="min-h-screen flex flex-col overflow-auto">
-      {/* ✅ Pass query and setQuery to NavBar */}
+      {/* Pass query and setQuery to NavBar */}
       <NavBar query={query} setQuery={setQuery} />
 
       {/* Loading State */}

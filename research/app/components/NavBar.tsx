@@ -40,6 +40,9 @@ export default function NavBar({ query, setQuery }: NavBarProps) {
         <Link href="/saved" className="nav-link">
           Saved
         </Link>
+        <Link href="/mail" className="nav-link">
+          Mail
+        </Link>
 
         <Image
           src="/assets/pic-placeholder-lg.png"

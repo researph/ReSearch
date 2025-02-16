@@ -6,7 +6,7 @@ import { Search } from "lucide-react";
 
 interface SearchBarProps {
   query: string;
-  setQuery: (query: string) => void; // ✅ Ensure setQuery is required
+  setQuery: (query: string) => void; // Ensure setQuery is required
 }
 
 export default function SearchBar({ query, setQuery }: SearchBarProps) {

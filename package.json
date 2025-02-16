@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@google-cloud/vertexai": "^1.9.3",
     "cors": "^2.8.5",
     "express": "^4.21.2"
   },
