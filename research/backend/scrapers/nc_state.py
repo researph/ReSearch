@@ -16,15 +16,17 @@ db_connection = mysql.connector.connect(
 )
 cursor = db_connection.cursor()
 
-# Step 1: Send a request to the main page containing the list of professors
+# Send a GET request to fetch the webpage content
 url = 'https://www.csc.ncsu.edu/directories/professors.php'
 response = requests.get(url)
 
 # Parse the HTML content
 soup = BeautifulSoup(response.text, 'html.parser')
 
-# Step 2: Find all professor links on the main page
+# List to store professor links
 professor_links = []
+
+# Scrape main page for each professor's page
 for link in soup.find_all('a', href=True):
     # Check if the link points to an individual professor's page
     href = link['href']
@@ -32,66 +34,73 @@ for link in soup.find_all('a', href=True):
         full_url = 'https://www.csc.ncsu.edu' + href if not href.startswith('http') else href
         professor_links.append(full_url)
 
-# Step 3: Scrape each professor's page for details
-professors_data = []
-for professor_url in professor_links:
-    professor_info = {}
+# List to store professor details
+professors = []
 
+# Scrape each professor's page for details
+for professor_url in professor_links:
     # Send request to the professor's individual page
     response = requests.get(professor_url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Get professor's name
+    # Extract professor name without trailing comma
     name_tag = soup.find('span', class_='prof_name')
-    if name_tag:
-        professor_info['Name'] = name_tag.get_text(strip=True)
+    name = name_tag.text.strip()[:-1] if name_tag else 'N/A'
 
-    # Get professor's photo (image tag with class 'profilepic')
-    img_tag = soup.find('img', class_='profilepic')
-    if img_tag:
-        professor_info['Photo'] = 'https://www.csc.ncsu.edu' + img_tag['src'] # Get the full image URL
 
-    # Get professor's email (found in the mailto link)
-    email_tag = soup.find('a', href=True, string=lambda text: '@' in text)
-    if email_tag:
-        professor_info['Email'] = email_tag.get_text(strip=True)
+    # Extract title without trailing spaces and department
+    title_tag = soup.find('span', class_='position')
+    title = title_tag.text.strip().split("  ")[0] if title_tag else 'N/A'
 
-    # Get professor's website (link to website)
-    website_tag = soup.find('a', href=True, string='Web Site')
-    if website_tag:
-        professor_info['Website'] = website_tag['href']
+    # Extract email
+    email_tag = soup.find("a", href=lambda href: href and "mailto:" in href)
+    email = email_tag.text.strip() if email_tag else 'N/A'
 
-    # Get research areas (list of topics in the "Research Areas" section)
+    # Extract research areas
     research_tag = soup.find('h2', string='Research Areas')
-    if research_tag:
-        research_areas = research_tag.find_next('ul')
-        if research_areas:
-            professor_info['Research Areas'] = [li.get_text(strip=True) for li in research_areas.find_all('li')]
+    if research_tag and research_tag.find_next('ul'):
+        research_list = [li.text.strip() for li in research_tag.find_next('ul').find_all('li')]
+        # Combine the research areas into a comma-separated string
+        research_areas = ', '.join(research_list)
+    else:
+        research_areas = 'N/A'
 
-    # Add the professor info to the list
-    professors_data.append(professor_info)
+    # Extract profile image URL
+    image_tag = soup.find('img', class_='profilepic')
+    image = 'https://www.csc.ncsu.edu' + image_tag['src'] if image_tag else 'N/A'
 
-# Step 4: Insert the scraped data into the MySQL database
+    # Extract professor's website
+    website_tag = soup.find('a', href=True, string='Web Site')
+    website = website_tag['href'] if website_tag else 'N/A'
+
+    # Store the professor's details
+    professors.append({
+        "name": name,
+        "title": title,
+        "email": email,
+        "research_areas": research_areas,
+        "image": image,
+        "website": website
+    })
+
+# Insert the scraped data into the MySQL database
 insert_query = """
-    INSERT INTO professors (name, title, email, research_interests, image, website)
-    VALUES (%s, %s, %s, %s, %s, %s)
+    INSERT INTO professors (school, department, name, title, email, research_areas, image, website)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
 """
 
-for professor in professors_data:
-    # Get the research areas as a string (comma-separated)
-    research_interests = ', '.join(professor.get('Research Areas', [])) if 'Research Areas' in professor else 'N/A'
-
-    # Check if the website link is available and insert "N/A" if not
-    website = professor.get('Website', 'N/A')
+for professor in professors:
 
     # Execute the insertion query
     cursor.execute(insert_query, (
-        professor['Name'], # name
-        professor.get('Title', 'N/A'), # title (you might want to extract it from another field)
-        professor['Email'], # email
-        research_interests, # research interests
-        professor['Photo'], # image
-        website # website
+        'NC State',
+        'Computer Science',
+        professor['name'], # name
+        professor['title'], # title
+        professor['email'], # email
+        professor['research_areas'], # research areas
+        professor['image'], # image
+        professor['website'] # website
     ))
 
 # Commit the changes to the database
@@ -101,4 +110,4 @@ db_connection.commit()
 cursor.close()
 db_connection.close()
 
-print("Data has been successfully inserted into the database.")
+print("NC State has been successfully inserted into the database.")

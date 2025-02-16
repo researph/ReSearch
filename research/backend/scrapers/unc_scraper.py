@@ -16,17 +16,17 @@ db_connection = mysql.connector.connect(
 )
 cursor = db_connection.cursor()
 
-# URL of the faculty page
-URL = "https://cs.unc.edu/about/people/?wpv-designation=faculty"  # Replace with actual faculty page URL
-
 # Send a GET request to fetch the webpage content
-soup = BeautifulSoup(requests.get(URL, headers={
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
-}).text, "html.parser")
+url = 'https://cs.unc.edu/about/people/?wpv-designation=faculty'
+response = requests.get(url)
+
+# Parse the HTML content
+soup = BeautifulSoup(response.text, 'html.parser')
 
 # List to store professor details
 professors = []
 
+# Scrape each card for details
 for card in soup.find_all("div", class_="col-sm-12 col-md-8"):
     # Extract professor name
     name_tag = card.find("a")
@@ -40,7 +40,7 @@ for card in soup.find_all("div", class_="col-sm-12 col-md-8"):
     email_tag = card.find("a", href=lambda href: href and "mailto:" in href)
     email = email_tag.text.strip() if email_tag else "N/A"
 
-    # Extract research interests (if available)
+    # Extract research interests
     research_interests_element = card.find("div", class_="details")
     research_interests = research_interests_element.text.strip() if research_interests_element else "N/A"
 
@@ -77,4 +77,4 @@ db_connection.commit()
 cursor.close()
 db_connection.close()
 
-print("Data has been successfully inserted into the database.")
+print("UNC has been successfully inserted into the database.")

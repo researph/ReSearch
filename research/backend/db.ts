@@ -23,42 +23,57 @@ db.connect((err) => {
   console.log('Connected to MySQL on port', process.env.DB_PORT);
 });
 
-const createProfessorsTableQuery = `
-  CREATE TABLE IF NOT EXISTS professors (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    school VARCHAR(255),
-    department VARCHAR(255),
-    name VARCHAR(255) NOT NULL,
-    title VARCHAR(255),
-    email VARCHAR(255),
-    research_interests TEXT,
-    image VARCHAR(255),
-    website VARCHAR(255)
-  );
-`;
+// Function to reset and recreate the professors table
+const resetProfessorsTable = () => {
+  const dropTableQuery = `DROP TABLE IF EXISTS professors;`;
 
-db.query(createProfessorsTableQuery, (err, results) => {
-  if (err) {
-    console.error('Error creating professors table:', err);
-  } else {
-    console.log('Professors table created (or already exists)');
-    runScrapers(); // Run scrapers after table creation
-  }
-
-  // Close the database connection
-  db.end((err) => {
+  db.query(dropTableQuery, (err) => {
     if (err) {
-      console.error('Error closing the database connection:', err);
-    } else {
-      console.log('Database connection closed');
+      console.error('Error dropping professors table:', err);
+      db.end();
+      return;
     }
+    console.log('Professors table dropped');
+
+    const createTableQuery = `
+      CREATE TABLE professors (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        school VARCHAR(255),
+        department VARCHAR(255),
+        name VARCHAR(255) NOT NULL,
+        title VARCHAR(255),
+        email VARCHAR(255),
+        research_areas TEXT,
+        image VARCHAR(255),
+        website VARCHAR(255)
+      );
+    `;
+
+    db.query(createTableQuery, (err) => {
+      if (err) {
+        console.error('Error creating professors table:', err);
+      } else {
+        console.log('Professors table created');
+        runScrapers(); // Run scrapers after table creation
+      }
+
+      // Close the database connection
+      db.end((err) => {
+        if (err) {
+          console.error('Error closing the database connection:', err);
+        } else {
+          console.log('Database connection closed');
+        }
+      });
+    });
   });
-});
+};
 
 // Function to run scrapers
 const runScrapers = () => {
   const scraperFolder = path.join(__dirname, 'scrapers'); // Adjusted to 'backend/scraper/'
-  const scrapers = ['duke_scraper.py', 'unc_scraper.py', 'nc_state.py'];
+  const scrapers = ['nc_state.py'];
+  // const scrapers = ['duke_scraper.py', 'unc_scraper.py', 'nc_state.py'];
 
   scrapers.forEach((script) => {
     const scriptPath = path.join(scraperFolder, script); // Construct full path
@@ -78,5 +93,8 @@ const runScrapers = () => {
     });
   });
 };
+
+// Reset and recreate the professors table
+resetProfessorsTable();
 
 export default db;
