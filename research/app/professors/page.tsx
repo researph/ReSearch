@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // ✅ Import this!
+import { useRouter, useSearchParams } from "next/navigation"; // ✅ Get query from URL
 import NavBar from "../components/NavBar";
 import Card from "../components/Card";
 import "../globals.css";
@@ -19,12 +19,13 @@ interface Professor {
 }
 
 export default function Professors() {
+  const searchParams = useSearchParams(); // ✅ Get query from URL
+  const router = useRouter();
+  const initialQuery = searchParams.get("query") || ""; // ✅ Start with URL query
+  const [query, setQuery] = useState<string>(initialQuery); // ✅ Use local state for query
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const searchParams = useSearchParams(); // ✅ Get query from URL
-  const query = searchParams.get("query") || ""; // ✅ Extract query
 
   useEffect(() => {
     const fetchProfessors = async () => {
@@ -45,21 +46,22 @@ export default function Professors() {
     fetchProfessors();
   }, []);
 
-  // ✅ Filter professors based on the search query from URL
+  // ✅ Ensure filtering works correctly for multiple search terms
   const filteredProfessors = professors.filter((professor) => {
-    const searchTerms = query.toLowerCase().split(" ");
-
-    return searchTerms.every((term) =>
-      Object.values(professor).some(
-        (value) =>
-          typeof value === "string" && value.toLowerCase().includes(term)
-      )
+    const lowerQuery = query.toLowerCase().split(" "); // ✅ Split multiple terms
+    return lowerQuery.every(
+      (term) =>
+        professor.name.toLowerCase().includes(term) ||
+        professor.department.toLowerCase().includes(term) ||
+        professor.school.toLowerCase().includes(term) ||
+        (professor.research_areas && professor.research_areas.toLowerCase().includes(term))
     );
   });
 
   return (
     <div className="min-h-screen flex flex-col overflow-auto">
-      <NavBar query={query} setQuery={() => {}} /> {/* Disable direct query state update */}
+      {/* ✅ Pass query state to NavBar */}
+      <NavBar query={query} setQuery={setQuery} />
 
       {/* Loading State */}
       {loading && (
@@ -77,11 +79,13 @@ export default function Professors() {
 
       {/* Professors Grid */}
       {!loading && !error && (
-        <div className="flex-grow mt-[125px] pb-8 px-4 overflow-auto flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl auto-rows-min">
-            {filteredProfessors.map((professor) => (
-              <Card key={professor.id} {...professor} />
-            ))}
+        <div className="mt-[125px] pb-8 px-4 overflow-auto flex justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl">
+            {filteredProfessors.length > 0 ? (
+              filteredProfessors.map((professor) => <Card key={professor.id} {...professor} />)
+            ) : (
+              <p className="text-gray-500 text-lg">No results found for "{query}"</p>
+            )}
           </div>
         </div>
       )}

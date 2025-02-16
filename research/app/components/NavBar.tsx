@@ -44,6 +44,11 @@ export default function NavBar({ query, setQuery }: NavBarProps) {
           Mail
         </Link>
 
+        <Link 
+          href="https://github.com/researph/ReSearch/graphs/contributors"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
         <Image
           src="/assets/pic-placeholder-lg.png"
           alt="User Profile"
@@ -51,6 +56,8 @@ export default function NavBar({ query, setQuery }: NavBarProps) {
           height={40}
           className="rounded-full border border-gray-300 cursor-pointer"
         />
+        </Link>
+        
       </div>
     </nav>
   );

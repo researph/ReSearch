@@ -61,7 +61,7 @@ export default function LetterPage() {
       <div className="flex flex-col items-center justify-center flex-grow px-4 space-y-6 mt-[100px]">
         {/* Input Form Card */}
         <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-xl flex flex-col space-y-4 border">
-          <h2 className="text-lg font-bold">📄 Upload Resume & Select Professor</h2>
+          <h2 className="text-lg font-bold">📄 Paste Resume & Select Professor</h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-3">
             <textarea
