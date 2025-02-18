@@ -60,9 +60,6 @@ for professor_link in professor_links:
         research_list = [li.text.strip() for li in research_tag.find_next('ul').find_all('li')]
         # Combine the research areas into a comma-separated string
         research_areas = ', '.join(research_list)
-        # Cut off at 300 characters
-        if len(research_areas) > 300:
-            research_areas = research_areas[:299] + '...'
     else:
         research_areas = 'N/A'
 

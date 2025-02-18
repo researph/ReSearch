@@ -78,9 +78,6 @@ for professor_link in professor_links:
             research_text = research_text[:-1]
         # Extract the research areas after the degree information
         research_areas = research_text.split('.')[-1].strip()
-        # Cut off at 300 characters
-        if len(research_areas) > 300:
-            research_areas = research_areas[:299] + '...'
     else:
         research_areas = 'N/A'
 
@@ -129,4 +126,4 @@ db_connection.commit()
 cursor.close()
 db_connection.close()
 
-print("UNC has been successfully inserted into the database.")
+print("UNC (CS) has been successfully inserted into the database.")

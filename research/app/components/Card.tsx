@@ -82,8 +82,13 @@ export default function Card({
       {/* Title (Optional) */}
       {title && <p className="text-sm text-gray-700">🎓 {title}</p>}
 
-      {/* Research Interests (Optional) */}
-      {research_areas && <p className="text-sm text-gray-700">🎯 {research_areas}</p>}
+      {/* Research Areas */}
+      {research_areas && (
+        <div className="text-sm text-gray-700">
+          🎯 {research_areas.slice(0, 300) + (research_areas.length > 300 ? "..." : "")}
+          {research_areas.length > 300}
+        </div>
+      )}
 
       {/* Push Icons to Bottom */}
       <div className="flex-grow"></div>

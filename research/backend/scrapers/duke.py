@@ -19,6 +19,7 @@ cursor = db_connection.cursor()
 # Send a GET request to fetch the webpage content
 url = 'https://cs.duke.edu/people/appointed-faculty/primary-faculty'
 response = requests.get(url)
+
 soup = BeautifulSoup(response.text, "html.parser")
 
 # List to store professor links
@@ -58,9 +59,6 @@ for professor_link in professor_links:
     # Extract research areas
     research_tag = soup.find('div', class_='excerpt')
     research_areas = research_tag.text.strip() if research_tag else 'N/A'
-    # Cut off at 300 characters
-    if len(research_areas) > 300:
-        research_areas = research_areas[:299] + '...'
 
     # Extract image
     image_tag = soup.find('div', class_='profile-img-box').find('img')
