@@ -114,7 +114,7 @@ async def main():
 
     # Commit changes to the database
     db_connection.commit()
-    print("UNC Biology data successfully inserted into the database.")
+    print("UNC (Bio) has been successfully inserted into the database.")
 
 # Run the asynchronous scraping
 asyncio.run(main())

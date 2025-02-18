@@ -64,7 +64,7 @@ const resetProfessorsTable = () => {
 // Function to run scrapers
 const runScrapers = () => {
   const scraperFolder = path.join(__dirname, 'scrapers'); // Adjusted to 'backend/scraper/'
-  const scrapers = ['unc_bio.py'];
+  const scrapers = ['unc_cs.py', 'nc_state.py', 'duke.py', 'unc_psych_neuro.py','unc_bio.py'];
 
   scrapers.forEach((script) => {
     const scriptPath = path.join(scraperFolder, script); // Construct full path
